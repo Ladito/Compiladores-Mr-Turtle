@@ -10,7 +10,9 @@ from sys import stdin
 
 
 dirProgram = {}
-nameProgram = ""
+idProgram = ""
+type = ""
+idFunc = ""
 
 
 def p_program(p):
@@ -19,60 +21,50 @@ def p_program(p):
 def p_directFunc(p):
 	'''directFunc : '''
 	global dirProgram
-	global nameProgram
-	nameProgram = [p-1]
-	dirProgram[nameProgram] = {'Tipo : void', 'varsTable':{}} 
+	global idProgram
+	idProgram = [p-1]
+	dirProgram[idProgram] = {'tipo' : 'void', 'varsTable':{}}
 
 def p_varD1(p):
 	'''varD1 : variableD varD2'''
 
-
 def p_var2(p):
-	'''varD2 : varD1'''
-
-
-def p_varD2Empty(p):
-	'''varD2 : empty'''
-
+	'''varD2 : varD1
+			 | '''
 
 def p_funcDec(p):
 	'''funcDec : functionDeclare funcDec2'''
 
-
 def p_funcDec2(p):
-	'''funcDec2 : funcDec'''
-
-
-def p_funcDec2Empty(p):
-	'''funcDec2 : empty'''
-
+	'''funcDec2 : funcDec
+				| '''
 
 def p_functionDeclare(p):
-	'''functionDeclare : function ID EQUALS typeS paramDeclare function'''
+	'''functionDeclare : function ID funcId EQUALS typeS paramDeclare function'''
 
+def p_funcId(p):
+	'''funcId : '''
+	global dirProgram
+    global type
+    idFunc = p[-1]
+    #direction = set_dir_global(typo,1)
+    dirProgram[nombrePrograma]['Vars'][idFunc] = {'Type': type, 'Scope': "global"}
+    #setValueGlobal(direccion,None)
 
 def p_function(p):
     '''function : LKEY com1 funct1 RKEY'''
 
-
 def p_com1(p):
     '''com1 : command com2'''
 
-
 def p_com2(p):
-    '''com2 : com1'''
-
-
-def p_com2Empty(p):
-    '''com2 : empty'''
+    '''com2 : com1
+			| '''
 
 
 def p_funct1(p):
-    '''funct1 : RETURN exp'''
-
-
-def p_funct1Empty(p):
-    '''funct1 : empty'''
+    '''funct1 : RETURN exp
+		      | '''
 
 
 def p_paramDeclare(p):
@@ -96,27 +88,15 @@ def p_paramOp1(p):
 
 
 def p_paramOp2(p):
-	'''paramOp2 : COMMA paramOp1'''
+	'''paramOp2 : COMMA paramOp1
+				| '''
 
 
-def p_paramOp2(p):
-	'''paramOp2 : empty'''
-
-
-def p_commandOp1(p):
-	'''command : funcCall'''
-
-
-def p_commandOp2(p):
-	'''command : assign'''
-
-
-def p_commandOp3(p):
-	'''command : instruction'''
-
-
-def p_commandOp4(p):
-	'''command : condition'''
+def p_command(p):
+	'''command : funcCall
+			   | assign
+			   | instruction
+			   | condition'''
 
 
 def p_variableD(p):
@@ -128,47 +108,27 @@ def p_varID1(p):
 
 
 def p_varID2(p):
-    '''varID2 : COMMA vardID1'''
+    '''varID2 : COMMA vardID1
+			  | '''
 
 
-def p_varID2(p):
-    '''varID2 : empty'''
+def p_type(p):
+    '''type : typeS
+			| LIST typeS LBRAK CTEI RBRAK'''
 
-
-def p_typeOp1(p):
-    '''type : typeS'''
-
-
-def p_typeOp2(p):
-    '''type : LIST typeVar LBRAK CTEI RBRAK'''
-
-
-def p_typeVarOp1(p):
-	'''typeVar : INT'''
-
-
-def p_typeVarOp2(p):
-	'''typeVar : FLOAT'''
-
-
-def p_typeSOp1(p):
-	'''typeS : INT'''
-
-
-def p_typeSOp2(p):
-	'''typeS : FLOAT'''
-
+def p_typeS(p):
+	'''typeS : INT
+			 | FLOAT'''
+	global type
+    type = p[1]
 
 def p_assign(p):
     '''assign : ID assignOp value SEMICOLON'''
 
 
-def p_assignOp2(p):
-	'''assignOp : LBRAK exp RBRAK'''
-
-
-def p_assignOp1(p):
-	'''assignOp : ASSIGN'''
+def p_assignOp(p):
+	'''assignOp : ASSIGN
+				| LBRAK exp RBRAK'''
 
 
 def p_expresion(p):
@@ -176,119 +136,64 @@ def p_expresion(p):
 
 
 def p_expresionOp(p):
-	'''expresionOp : eOperador exp'''
+	'''expresionOp : eOperador exp
+				   | '''
 
 
-def p_expresionOp(p):
-	'''expresionOp : empty'''
-
-
-def p_eOperadorOp1(p):
-    '''eOperador : EQUALTO'''
-
-
-def p_eOperadorOp2(p):
-    '''eOperador : NOTEQUAL'''
-
-
-def p_eOperadorOp3(p):
-    '''eOperador : LESSTHAN'''
-
-
-def p_eOperadorOp4(p):
-    '''eOperador : GREATERTHAN'''
-
-
-def p_eOperadorOp5(p):
-    '''eOperador : LESSEQUAL'''
-
-
-def p_eOperadorOp6(p):
-    '''eOperador : GREATEREQUAL'''
-
+def p_eOperador(p):
+    '''eOperador : EQUALTO
+				 | NOTEQUAL
+				 | LESSTHAN
+				 | GREATERTHAN
+				 | LESSEQUAL
+				 | GREATEREQUAL'''
 
 def p_exp(p):
     '''exp : termino expOp'''
 
 
-def p_expOp1(p):
-    '''expOp : ADD exp'''
-
-
-def p_expOp2(p):
-    '''expOp : MINUS exp'''
-
-
 def p_expOp(p):
-    '''expOp : empty'''
+    '''expOp : ADD exp
+			 | MINUS exp
+			 | '''
 
 
 def p_termino(p):
     '''termino : factor termOp'''
 
 
-def p_termOp1(p):
-    '''termOp : TIMES termino'''
+def p_termOp(p):
+    '''termOp : TIMES termino
+			  | DIVISION termino
+			  | '''
 
 
-def p_termOp2(p):
-    '''termOp : DIVISION termino'''
+def p_factor(p):
+	'''factor : LPAR funcCall RPAR
+			  | factOp varCte'''
 
 
-def p_termOp3(p):
-    '''termOp : empty'''
+def p_factOp(p):
+	'''factOp : ADD
+			  | MINUS
+			  | '''
 
 
-def p_factorOp1(p):
-	'''factor : LPAR funcCall RPAR'''
-
-
-def p_factorOp2(p):
-	'''factor : factOp varCte'''
-
-
-def p_factOp1(p):
-	'''factOp : ADD'''
-
-
-def p_factOp2(p):
-	'''factOp : MINUS'''
-
-
-def p_factOp3(p):
-	'''factOp : empty'''
-
-
-def p_varCteOp1(p):
-	'''varCte : ID'''
-
-
-def p_varCteOp2(p):
-	'''varCte : CTEI'''
-
-
-def p_varCteOp3(p):
-	'''varCte : CTEF'''
-
-
-def p_varCteOp4(p):
-	'''varCte : CTES'''
-
-
-def p_varCteOp5(p):
-	'''varCte : funcCall'''
+def p_varCte(p):
+	'''varCte : ID
+			  | CTEI
+			  | CTEF
+			  | CTES
+			  | funcCall'''
 
 
 def p_funcCall(p):
     ''' funcCall : ID parameter'''
 
 
-def p_conditionOp1(p):
-    '''condition : condIf'''
-
-
-def p_conditionOp2(p):
-    '''condition : condWhile'''
+def p_condition(p):
+    '''condition : condIf
+				 | condWhile'''
 
 
 def p_condIF(p):
@@ -309,27 +214,18 @@ def p_condOp1(p):
 
 #DUDAAAAA! porque de todos los commands func Call no tiene ninguna comma o ; para poner otro y aqui no se especifica tampoco
 def p_condOp2(p):
-    '''condOp2 : condOp1'''
-
-
-def p_condOp2(p):
-    '''condOp1 : empty'''
+    '''condOp2 : condOp1
+			   | '''
 
 
 def p_instruction(p):
     '''instruction : instOp SEMICOLON'''
 
 
-def p_instOp1(p):
-    '''instOp : instBloque1'''
-
-
-def p_instOp2(p):
-    '''instOp : instBloque2'''
-
-
-def p_instOp3(p):
-    '''instOp : instBloque3'''
+def p_instOp(p):
+    '''instOp : instBloque1
+			  | instBloque2
+			  | instBloque3'''
 
 
 def p_instBloque1(p):
@@ -344,41 +240,18 @@ def p_instBloque3(p):
     '''instBloque3 : instStatus LPAR RPAR'''
 
 
-def p_instStatusOp1(p):
-    '''instStatus : ACTIVATE'''
+def p_instStatusOp(p):
+    '''instStatus : ACTIVATE
+				  | DEACTIVATE'''
 
 
-def p_instStatusOp2(p):
-    '''instStatus : DEACTIVATE'''
-
-
-def p_instFuncOp1(p):
-    '''instFunc : LEFT'''
-
-
-def p_instFuncOp2(p):
-    '''instFunc : RIGHT'''
-
-
-def p_instFuncOp3(p):
-    '''instFunc : STRAIGHT'''
-
-
-def p_instFuncOp4(p):
-    '''instFunc : BACK'''
-
-
-def p_instFuncOp5(p):
-    '''instFunc : COLOR'''
-
-
-def p_instFuncOp6(p):
-    '''instFunc : WRITE'''
-
-
-def p_empty(p):
-	'''empty :'''
-	pass
+def p_instFunc(p):
+    '''instFunc : LEFT
+				| RIGHT
+				| STRAIGHT
+				| BACK
+				| COLOR
+				| WRITE'''
 
 def p_error(p):
 

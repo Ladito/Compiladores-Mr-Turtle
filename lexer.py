@@ -91,4 +91,11 @@ def t_error(t):
     t.lexer.skip(1)
 
 #Creating lexer
-analizador = lex.lex()
+lexer = lex.lex()
+
+def verTokens(entrada):
+    lexer.input(entrada)
+    token = lexer.token()
+    while (token is not None):
+        print(token)
+        token = lexer.token()
