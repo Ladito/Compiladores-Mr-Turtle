@@ -1,6 +1,3 @@
-#Gala Stefanía Ramos Islas a00817135
-#Luis Adolfo Diaz Torres   A01280862
-
 import ply.lex as lex
 import re
 import codecs
@@ -9,12 +6,11 @@ import sys
 
 #Valid Tokens
 tokens = ['ID', 'CTEI','CTEF','CTES','LPAR','RPAR','DOT','MINUS','ADD','EQUALS','ASSIGN',
-					'EQUALTO','NOTEQUAL','GREATERTHAN','LESSTHAN','COMMA','SEMICOLON','DIVISION'
-					'TIMES','LBRAK','RBRAK','GREATEREQUAL','LESSEQUAL','LKEY','RKEY']
+'EQUALTO','NOTEQUAL','GREATERTHAN','LESSTHAN','COMMA','SEMICOLON','DIVISION',
+'TIMES','LBRAK','RBRAK','GREATEREQUAL','LESSEQUAL','LKEY','RKEY']
 
 #Valid words specific for the program
 reservedWords = {
-
 	'program' : 'PROGRAM',
 	'function' : 'FUNCTION',
 	'right' : 'RIGHT',
@@ -69,12 +65,12 @@ t_RBRAK = r'\]'
 def t_ID(t):
     r'[a-zA-Z][a-z-A-Z0-9]*'
     if t.value in reservedWords:
-        t.type = palabrasReservadas[t.value]
+        t.type = reservedWords[t.value]
     return t
 
 def t_CTEI(t):
 	r'\d+'
-    t.value = int(t.value)
+	t.value = int(t.value)
 	return t
 
 def t_CTES(t):
@@ -91,11 +87,11 @@ def t_error(t):
     t.lexer.skip(1)
 
 #Creating lexer
-lexer = lex.lex()
+analizador = lex.lex()
 
-def verTokens(entrada):
-    lexer.input(entrada)
-    token = lexer.token()
-    while (token is not None):
-        print(token)
-        token = lexer.token()
+#def verTokens(entrada):
+#    lexer.input(entrada)
+#    token = lexer.token()
+#    while (token is not None):
+#        print(token)
+#        token = lexer.token()

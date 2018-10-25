@@ -1,17 +1,14 @@
-#Gala Stefanía Ramos Islas a00817135
-#Luis Adolfo Diaz Torres   A01280862
-
 import ply.yacc as yacc
 import re
 import codecs
 import os
-from lexer.py import tokens
+from lexer import tokens
 from sys import stdin
 
 
 dirProgram = {}
 idProgram = ""
-type = ""
+tipo = ""
 idFunc = ""
 
 
@@ -40,15 +37,15 @@ def p_funcDec2(p):
 				| '''
 
 def p_functionDeclare(p):
-	'''functionDeclare : function ID funcId EQUALS typeS paramDeclare function'''
+	'''functionDeclare : function ID funcId EQUALS tipoS paramDeclare function'''
 
 def p_funcId(p):
 	'''funcId : '''
 	global dirProgram
-    global type
-    idFunc = p[-1]
-    #direction = set_dir_global(typo,1)
-    dirProgram[nombrePrograma]['Vars'][idFunc] = {'Type': type, 'Scope': "global"}
+	global tipo
+	idFunc = p[-1]
+	#direction = set_dir_global(typo,1)
+	dirProgram[nombrePrograma]['Vars'][idFunc] = {'tipo': tipo, 'Scope': "global"}
     #setValueGlobal(direccion,None)
 
 def p_function(p):
@@ -72,8 +69,7 @@ def p_paramDeclare(p):
 
 
 def p_paramD1(p):
-	'''paramD1 : typeS ID paramD2'''
-
+	'''paramD1 : tipoS ID paramD2'''
 
 def p_paramD2(p):
 	'''paramD2 : COMMA paramD1'''
@@ -98,29 +94,25 @@ def p_command(p):
 			   | instruction
 			   | condition'''
 
-
-def p_variableD(p):
-    '''variableD : type vardID1'''
-
-
-def p_varID1(p):
-    '''varID1 : ID vardID2'''
-
-
 def p_varID2(p):
     '''varID2 : COMMA vardID1
 			  | '''
 
+def p_varID1(p):
+    '''varID1 : ID vardID2'''
 
-def p_type(p):
-    '''type : typeS
-			| LIST typeS LBRAK CTEI RBRAK'''
+def p_variableD(p):
+    '''variableD : tipo vardID1'''
 
-def p_typeS(p):
-	'''typeS : INT
+def p_tipo(p):
+    '''tipo : tipoS
+			| LIST tipoS LBRAK CTEI RBRAK'''
+
+def p_tipoS(p):
+	'''tipoS : INT
 			 | FLOAT'''
-	global type
-    type = p[1]
+	global tipo
+	tipo = p[1]
 
 def p_assign(p):
     '''assign : ID assignOp value SEMICOLON'''
@@ -254,7 +246,39 @@ def p_instFunc(p):
 				| WRITE'''
 
 def p_error(p):
+	print("Error de sintxis", p)
 
 
+def buscarFicheros(directorio):
+    ficheros = []
+    numArchivo = ''
+    respuesta = False
+    contador = 1
+
+    for base, dirs, files in os.walk(directorio):
+        ficheros.append(files)
+    for file in files:
+        print str(contador) + ". " + file
+        contador = contador + 1
+
+    while respuesta == False:
+        numArchivo = raw_input('\nNumero de test: ')
+        for file in files:
+            if file == files[int(numArchivo)-1]:
+                respuesta = True
+                break
+
+    print "Has escogido \"%s\" \n" %files[int(numArchivo)-1]
+    return files[int(numArchivo)-1]
+
+directorio = '/Users/MAC/Documents/Tec/9semestre/Compiladores/Compiladores-Mr-Turtle/test/'
+archivo  = buscarFicheros(directorio)
+test = directorio + archivo
+fp = codecs.open(test,"r","utf-8")
+cadena  = fp.read()
+fp.close()
 
 parser = yacc.yacc()
+result = parser.parse(cadena)
+
+print result
