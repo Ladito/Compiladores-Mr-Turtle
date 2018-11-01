@@ -1,0 +1,1 @@
+program prueba2 float b; function hola : float(int a) { a=5; return 8 } main(float c) { c=5; }

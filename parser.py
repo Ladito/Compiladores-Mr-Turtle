@@ -23,7 +23,8 @@ def p_directFunc(p):
 	dirProgram[idProgram] = {'tipo' : 'void', 'varsTable':{}}
 
 def p_varD1(p):
-	'''varD1 : variableD varD2'''
+	'''varD1 : variableD varD2
+			 | '''
 
 def p_var2(p):
 	'''varD2 : varD1
@@ -37,16 +38,16 @@ def p_funcDec2(p):
 				| '''
 
 def p_functionDeclare(p):
-	'''functionDeclare : function ID funcId EQUALS tipoS paramDeclare function'''
+	'''functionDeclare : FUNCTION ID funcId EQUALS tipoS paramDeclare function'''
 
 def p_funcId(p):
 	'''funcId : '''
 	global dirProgram
 	global tipo
 	idFunc = p[-1]
-	#direction = set_dir_global(typo,1)
+	direction = set_dir_global(typo,1)
 	dirProgram[nombrePrograma]['Vars'][idFunc] = {'tipo': tipo, 'Scope': "global"}
-    #setValueGlobal(direccion,None)
+	setValueGlobal(direccion,None)
 
 def p_function(p):
     '''function : LKEY com1 funct1 RKEY'''
@@ -57,23 +58,26 @@ def p_com1(p):
 def p_com2(p):
     '''com2 : com1
 			| '''
-
+			
+			
 
 def p_funct1(p):
     '''funct1 : RETURN exp
 		      | '''
 
-
-def p_paramDeclare(p):
-	'''paramDeclare : LPAR paramD1 RPAR'''
-
+def p_paramDec(p):
+	'''paramDec : paramD1
+				| '''
 
 def p_paramD1(p):
 	'''paramD1 : tipoS ID paramD2'''
 
 def p_paramD2(p):
-	'''paramD2 : COMMA paramD1'''
+	'''paramD2 : COMMA paramD1
+				| '''
 
+def p_paramDeclare(p):
+	'''paramDeclare : LPAR paramDec RPAR'''
 
 def p_parameter(p):
 	'''parameter : LPAR paramOp1 RPAR'''
@@ -95,14 +99,14 @@ def p_command(p):
 			   | condition'''
 
 def p_varID2(p):
-    '''varID2 : COMMA vardID1
-			  | '''
+    '''varID2 : COMMA varID1
+			  | SEMICOLON'''
 
 def p_varID1(p):
-    '''varID1 : ID vardID2'''
+    '''varID1 : ID varID2'''
 
 def p_variableD(p):
-    '''variableD : tipo vardID1'''
+    '''variableD : tipo varID1'''
 
 def p_tipo(p):
     '''tipo : tipoS
@@ -111,11 +115,11 @@ def p_tipo(p):
 def p_tipoS(p):
 	'''tipoS : INT
 			 | FLOAT'''
-	global tipo
-	tipo = p[1]
+	#global tipo
+	#tipo = p[1]
 
 def p_assign(p):
-    '''assign : ID assignOp value SEMICOLON'''
+    '''assign : ID assignOp exp SEMICOLON'''
 
 
 def p_assignOp(p):
@@ -197,14 +201,13 @@ def p_condWhile(p):
 
 
 def p_condElse(p):
-    '''condElse : ELSE LKEY condOp1 RKEY'''
+    '''condElse : ELSE LKEY condOp1 RKEY
+				| '''
 
 
 def p_condOp1(p):
     '''condOp1 : command condOp2'''
 
-
-#DUDAAAAA! porque de todos los commands func Call no tiene ninguna comma o ; para poner otro y aqui no se especifica tampoco
 def p_condOp2(p):
     '''condOp2 : condOp1
 			   | '''
@@ -246,7 +249,7 @@ def p_instFunc(p):
 				| WRITE'''
 
 def p_error(p):
-	print("Error de sintxis", p)
+	print("Error de sintaxis", p)
 
 
 def buscarFicheros(directorio):
@@ -271,14 +274,13 @@ def buscarFicheros(directorio):
     print "Has escogido \"%s\" \n" %files[int(numArchivo)-1]
     return files[int(numArchivo)-1]
 
-directorio = '/Users/MAC/Documents/Tec/9semestre/Compiladores/Compiladores-Mr-Turtle/test/'
+directorio = 'C:/Users/Mario de la Fuente/Desktop/Programas/test/'
 archivo  = buscarFicheros(directorio)
 test = directorio + archivo
 fp = codecs.open(test,"r","utf-8")
 cadena  = fp.read()
 fp.close()
-
 parser = yacc.yacc()
 result = parser.parse(cadena)
 
-print result
+#print result

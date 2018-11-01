@@ -1,2 +1,13 @@
-m = a;
-a = 1+2;
+program hola
+function saludo:int(int mano)
+{
+a = 6;
+return 5
+}
+
+main(int c){
+if(a==5)
+{
+a=a+1;
+}
+}

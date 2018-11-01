@@ -38,7 +38,7 @@ reservedWords = {
 tokens += reservedWords.values()
 
 #Valid operations for the programs
-t_ignore = '\t\n'
+t_ignore = ' \t\r\n'
 t_DOT = r'\.'
 t_ADD = r'\+'
 t_MINUS = r'\-'
@@ -55,7 +55,7 @@ t_LESSTHAN = r'\<'
 t_GREATEREQUAL = r'\>\='
 t_LESSEQUAL = r'\<\='
 t_LPAR = r'\('
-t_RPAR = r'\('
+t_RPAR = r'\)'
 t_LKEY = r'\{'
 t_RKEY = r'\}'
 t_LBRAK = r'\['
@@ -87,11 +87,40 @@ def t_error(t):
     t.lexer.skip(1)
 
 #Creating lexer
-analizador = lex.lex()
+lex.lex()
 
-#def verTokens(entrada):
-#    lexer.input(entrada)
-#    token = lexer.token()
-#    while (token is not None):
-#        print(token)
-#        token = lexer.token()
+def verTokens(entrada):
+    lexer.input(entrada)
+    token = lexer.token()
+    while (token is not None):
+        print(token)
+        token = lexer.token()
+
+
+# Test it out
+data = '''
+program hola
+
+function saludo:int(int mano)
+{
+a = 6;
+return 5;
+}
+
+main(int c){
+if(a==5)
+{
+a=a+1;
+}
+}
+'''
+
+# Give the lexer some input
+#lex.input(data)
+
+ #Tokenize
+#while True:
+#    tok = lex.token()
+#    if not tok: 
+#        break      # No more input
+#    print(tok)
